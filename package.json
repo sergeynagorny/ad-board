@@ -1,0 +1,25 @@
+{
+  "name": "ad-board",
+  "version": "1.0.0",
+  "description": "«Доска объявлений»",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack-dev-server",
+    "build": "webpack",
+    "eslint": "eslint src/**/*.js",
+    "test": "npm run eslint"
+  },
+  "author": "Sergey Nagorny",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "7.12.1",
+    "eslint-config-htmlacademy": "2.1.0",
+    "eslint-plugin-import": "2.22.1",
+    "stylelint-config-htmlacademy": "0.1.4",
+    "stylelint-config-rational-order": "0.1.2",
+    "stylelint-order": "4.1.0",
+    "webpack": "5.3.2",
+    "webpack-cli": "3.3.12",
+    "webpack-dev-server": "3.11.2"
+  }
+}
