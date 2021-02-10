@@ -1,3 +1,5 @@
+import AbstractView from "./abstract-view";
+
 const createAppFilterTemplate = () => {
   return /* html */`
     <section class="onlineshop-app__filter filter">
@@ -7,4 +9,8 @@ const createAppFilterTemplate = () => {
     `;
 };
 
-export default createAppFilterTemplate;
+export default class AppFilterView extends AbstractView {
+  getTemplate() {
+    return createAppFilterTemplate();
+  }
+}

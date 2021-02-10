@@ -1,3 +1,5 @@
+import AbstractView from "./abstract-view";
+
 const createSortingOrderTemplate = () => {
   return /* html */`
     <fieldset class="sorting__order">
@@ -21,4 +23,8 @@ const createSortingOrderTemplate = () => {
     `;
 };
 
-export default createSortingOrderTemplate;
+export default class SortingOrderView extends AbstractView {
+  getTemplate() {
+    return createSortingOrderTemplate();
+  }
+}

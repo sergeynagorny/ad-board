@@ -1,3 +1,5 @@
+import AbstractView from "./abstract-view";
+
 const createFilterCarTemplate = () => {
   return /* html */`
     <div class="filter__car">
@@ -63,4 +65,8 @@ const createFilterCarTemplate = () => {
     `;
 };
 
-export default createFilterCarTemplate;
+export default class FilterCarView extends AbstractView {
+  getTemplate() {
+    return createFilterCarTemplate();
+  }
+}

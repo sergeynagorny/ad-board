@@ -1,3 +1,5 @@
+import AbstractView from "./abstract-view";
+
 const createFilterCameraTemplate = () => {
   return /* html */`
     <div class="filter__camera">
@@ -51,4 +53,8 @@ const createFilterCameraTemplate = () => {
     `;
 };
 
-export default createFilterCameraTemplate;
+export default class FilterCameraView extends AbstractView {
+  getTemplate() {
+    return createFilterCameraTemplate();
+  }
+}

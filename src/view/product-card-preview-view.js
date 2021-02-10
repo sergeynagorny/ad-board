@@ -1,3 +1,5 @@
+import AbstractView from "./abstract-view";
+
 const createProductCardPreviewTemplate = () => {
   return /* html */`
     <li class="results__item product">
@@ -32,4 +34,14 @@ const createProductCardPreviewTemplate = () => {
     `;
 };
 
-export default createProductCardPreviewTemplate;
+export default class ProductCardPreviewView extends AbstractView {
+  constructor(product) {
+    super();
+
+    this._product = product;
+  }
+
+  getTemplate() {
+    return createProductCardPreviewTemplate(this._product);
+  }
+}

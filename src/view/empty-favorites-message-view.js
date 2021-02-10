@@ -1,3 +1,5 @@
+import AbstractView from "./abstract-view";
+
 const createEmptyFavoritesMessageTemplate = () => {
   return /* html */`
     <div class="results__info results__info--empty-block">
@@ -7,4 +9,8 @@ const createEmptyFavoritesMessageTemplate = () => {
     `;
 };
 
-export default createEmptyFavoritesMessageTemplate;
+export default class EmptyFavoritesMessageView extends AbstractView {
+  getTemplate() {
+    return createEmptyFavoritesMessageTemplate();
+  }
+}

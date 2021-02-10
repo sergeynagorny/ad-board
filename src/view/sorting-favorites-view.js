@@ -1,3 +1,5 @@
+import AbstractView from "./abstract-view";
+
 const createSortingFavoritesTemplate = () => {
   return /* html */`
     <div class="sorting__favourites">
@@ -13,4 +15,8 @@ const createSortingFavoritesTemplate = () => {
     `;
 };
 
-export default createSortingFavoritesTemplate;
+export default class SortingFavoritesView extends AbstractView {
+  getTemplate() {
+    return createSortingFavoritesTemplate();
+  }
+}

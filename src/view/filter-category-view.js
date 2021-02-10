@@ -1,3 +1,5 @@
+import AbstractView from "./abstract-view";
+
 const createFilterCategoryTemplate = () => {
   return /* html */`
     <div class="filter__select-wrapper">
@@ -17,4 +19,8 @@ const createFilterCategoryTemplate = () => {
     `;
 };
 
-export default createFilterCategoryTemplate;
+export default class FilterCategoryView extends AbstractView {
+  getTemplate() {
+    return createFilterCategoryTemplate();
+  }
+}

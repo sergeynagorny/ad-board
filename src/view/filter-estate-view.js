@@ -1,3 +1,5 @@
+import AbstractView from "./abstract-view";
+
 const createFilterEstateTemplate = () => {
   return /* html */`
     <div class="filter__estate">
@@ -56,4 +58,8 @@ const createFilterEstateTemplate = () => {
     `;
 };
 
-export default createFilterEstateTemplate;
+export default class FilterEstateView extends AbstractView {
+  getTemplate() {
+    return createFilterEstateTemplate();
+  }
+}

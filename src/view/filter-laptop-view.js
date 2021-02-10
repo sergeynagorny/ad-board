@@ -1,3 +1,5 @@
+import AbstractView from "./abstract-view";
+
 const createFilterLaptopTemplate = () => {
   return /* html */`
     <div class="filter__laptop">
@@ -85,4 +87,8 @@ const createFilterLaptopTemplate = () => {
     `;
 };
 
-export default createFilterLaptopTemplate;
+export default class FilterLaptopView extends AbstractView {
+  getTemplate() {
+    return createFilterLaptopTemplate();
+  }
+}

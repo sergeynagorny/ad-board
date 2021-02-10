@@ -1,3 +1,5 @@
+import AbstractView from "./abstract-view";
+
 const createFilterRangeTemplate = () => {
   return /* html */`
     <div class="filter__range">
@@ -7,4 +9,8 @@ const createFilterRangeTemplate = () => {
     `;
 };
 
-export default createFilterRangeTemplate;
+export default class FilterRangeView extends AbstractView {
+  getTemplate() {
+    return createFilterRangeTemplate();
+  }
+}

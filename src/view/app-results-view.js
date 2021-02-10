@@ -1,3 +1,5 @@
+import AbstractView from "./abstract-view";
+
 const createAppResultsTemplate = () => {
   return /* html */`
     <section class="onlineshop-app__results results">
@@ -13,4 +15,8 @@ const createAppResultsTemplate = () => {
     `;
 };
 
-export default createAppResultsTemplate;
+export default class AppResultsView extends AbstractView {
+  getTemplate() {
+    return createAppResultsTemplate();
+  }
+}

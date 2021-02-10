@@ -1,3 +1,5 @@
+import AbstractView from "./abstract-view";
+
 const createEmptyProductsMessageTemplate = () => {
   return /* html */`
     <div class="results__info results__info--empty-block">
@@ -7,4 +9,8 @@ const createEmptyProductsMessageTemplate = () => {
     `;
 };
 
-export default createEmptyProductsMessageTemplate;
+export default class EmptyProductsMessageView extends AbstractView {
+  getTemplate() {
+    return createEmptyProductsMessageTemplate();
+  }
+}

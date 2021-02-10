@@ -1,4 +1,6 @@
-const createProductCardFullTemplate = () => {
+import AbstractView from "./abstract-view";
+
+const createProductCardFullTemplate = (product) => {
   return /* html */`
     <section class="popup">
       <div class="popup__inner">
@@ -82,4 +84,14 @@ const createProductCardFullTemplate = () => {
     `;
 };
 
-export default createProductCardFullTemplate;
+export default class ProductCardFullView extends AbstractView {
+  constructor(product) {
+    super();
+
+    this._product = product;
+  }
+
+  getTemplate() {
+    return createProductCardFullTemplate(this._product);
+  }
+}
