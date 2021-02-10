@@ -1,6 +1,48 @@
 import AbstractView from "./abstract-view";
+import {getPublishDateString} from "../utils/date";
+import {getFormattedPrice, getMergedAddress, getFilteredEntries} from "../utils/utils";
+import {adaptFilterName, adaptFilterValue} from "../utils/product-adapters";
+
+const RatingClass = {
+  GOOD: `seller--good`,
+  BAD: `seller--bad`,
+};
+
+const RATING_GOOD = 4.8;
+const RATING_BAD = 4;
+
+const getRatingClass = (rating) => {
+  if (rating >= RATING_GOOD) {
+    return RatingClass.GOOD;
+  } else if (rating < RATING_BAD) {
+    return RatingClass.BAD;
+  }
+  return ``;
+};
+
+const createCharsMarkup = (category, chars) => {
+  return getFilteredEntries(chars).map(([key, value]) => {
+    return (/* html */`
+      <li class="chars__item">
+        <div class="chars__name">${adaptFilterName(category, key)}</div>
+        <div class="chars__value">${adaptFilterValue(category, value)}</div>
+      </li>
+  `);
+  }).join(`\n`);
+};
+
 
 const createProductCardFullTemplate = (product) => {
+  const {name, price, address, publishDate, description, seller, category, filters} = product;
+  const {city, street, building} = address;
+  const {fullname, rating} = seller;
+
+  const formattedPrice = getFormattedPrice(price);
+  const formattedDate = getPublishDateString(publishDate);
+  const formattedAddress = getMergedAddress(city, street, building);
+  const ratingCLass = getRatingClass(rating);
+  const charsMarkup = createCharsMarkup(category, filters);
+
   return /* html */`
     <section class="popup">
       <div class="popup__inner">
@@ -10,9 +52,9 @@ const createProductCardFullTemplate = (product) => {
               d="M0.292893 0.292893C0.683418 -0.0976311 1.31658 -0.0976311 1.70711 0.292893L8 6.58579L14.2929 0.292893C14.6834 -0.0976311 15.3166 -0.0976311 15.7071 0.292893C16.0976 0.683418 16.0976 1.31658 15.7071 1.70711L9.41421 8L15.7071 14.2929C16.0976 14.6834 16.0976 15.3166 15.7071 15.7071C15.3166 16.0976 14.6834 16.0976 14.2929 15.7071L8 9.41421L1.70711 15.7071C1.31658 16.0976 0.683418 16.0976 0.292893 15.7071C-0.0976311 15.3166 -0.0976311 14.6834 0.292893 14.2929L6.58579 8L0.292893 1.70711C-0.0976311 1.31658 -0.0976311 0.683418 0.292893 0.292893Z" />
           </svg>
         </button>
-        <div class="popup__date">3 дня назад</div>
-        <h3 class="popup__title">Ford Mustang 2020</h3>
-        <div class="popup__price">2 950 000 ₽</div>
+        <div class="popup__date">${formattedDate}</div>
+        <h3 class="popup__title">${name}</h3>
+        <div class="popup__price">${formattedPrice} ₽</div>
         <div class="popup__columns">
           <div class="popup__left">
             <div class="popup__gallery gallery">
@@ -46,37 +88,25 @@ const createProductCardFullTemplate = (product) => {
               </ul>
             </div>
             <ul class="popup__chars chars">
-              <li class="chars__item">
-                <div class="chars__name">Год выпуска</div>
-                <div class="chars__value">1999</div>
-              </li>
-              <li class="chars__item">
-                <div class="chars__name">Коробка передач</div>
-                <div class="chars__value">механическая</div>
-              </li>
-              <li class="chars__item">
-                <div class="chars__name">Тип кузова</div>
-                <div class="chars__value">внедорожник</div>
-              </li>
+              ${charsMarkup}
             </ul>
-            <div class="popup__seller seller seller--good">
+            <div class="popup__seller seller ${ratingCLass}">
               <h3>Продавец</h3>
               <div class="seller__inner">
-                <a class="seller__name" href="#">Автосалон Pony Car</a>
-                <div class="seller__rating"><span>4.9</span></div>
+                <a class="seller__name">${fullname}</a>
+                <div class="seller__rating"><span>${rating}</span></div>
               </div>
             </div>
             <div class="popup__description">
               <h3>Описание товара</h3>
-              <p>Форд Мустанг 2020 года выпуска, один владелец, пробег 1 км, объём двигателя 5,8 литра, 662 л.с.,
-                максимальная скорость — 320 км/ч. Причина продажи — страшно ездить.</p>
+              <p>${description}</p>
             </div>
           </div>
           <div class="popup__right">
             <div class="popup__map">
-              <img src="img/map.jpg" width="268" height="180" alt="Москва, Нахимовский проспект, дом 5">
+              <img src="img/map.jpg" width="268" height="180" alt="${formattedAddress}">
             </div>
-            <div class="popup__address">Москва, Нахимовский проспект, дом 5</div>
+            <div class="popup__address">${formattedAddress}</div>
           </div>
         </div>
       </div>

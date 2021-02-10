@@ -1,6 +1,22 @@
 import AbstractView from "./abstract-view";
+import {getPublishDateDifference} from "../utils/date";
+import {getFormattedPrice, getMergedAddress} from "../utils/utils";
 
-const createProductCardPreviewTemplate = () => {
+const MAX_PHOTO_COUNT = 5;
+
+const createMorePhotoPlugMarkup = (count) => {
+  return count > MAX_PHOTO_COUNT ? `<div class="product__image-more-photo hidden">+${count - MAX_PHOTO_COUNT} фото</div>` : ``;
+};
+
+const createProductCardPreviewTemplate = (product) => {
+  const {name, price, address, publishDate, photos} = product;
+  const {city, street} = address;
+
+  const cityAndStreet = getMergedAddress(city, street);
+  const formattedPrice = getFormattedPrice(price);
+  const formattedDate = getPublishDateDifference(publishDate);
+  const morePhotoPlugMarkup = createMorePhotoPlugMarkup(photos.length);
+
   return /* html */`
     <li class="results__item product">
       <button class="product__favourite fav-add" type="button" aria-label="Добавить в избранное">
@@ -11,9 +27,8 @@ const createProductCardPreviewTemplate = () => {
         </svg>
       </button>
       <div class="product__image">
-        <div class="product__image-more-photo hidden">+2 фото</div>
-        <img src="img/item1.jpg" srcset="img/item1-2x.jpg 2x" width="318" height="220"
-          alt="Загородный дом с видом на озеро">
+        ${morePhotoPlugMarkup}
+        <img src="${photos[0]}" width="318" height="220" alt=${name}>
         <div class="product__image-navigation">
           <span class="product__navigation-item product__navigation-item--active"></span>
           <span class="product__navigation-item"></span>
@@ -24,11 +39,11 @@ const createProductCardPreviewTemplate = () => {
       </div>
       <div class="product__content">
         <h3 class="product__title">
-          <a href="#">Загородный дом с видом на озеро</a>
+          <a href="#">${name}</a>
         </h3>
-        <div class="product__price">3 000 000 ₽</div>
-        <div class="product__address">Приозёрск, улица Прибрежная</div>
-        <div class="product__date">2 часа назад</div>
+        <div class="product__price">${formattedPrice} ₽</div>
+        <div class="product__address">${cityAndStreet}</div>
+        <div class="product__date">${formattedDate}</div>
       </div>
     </li>
     `;
