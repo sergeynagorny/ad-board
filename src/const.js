@@ -6,7 +6,7 @@ export const CategoryType = {
   CARS: `cars`,
 };
 
-export const SortingOrder = {
+export const SortType = {
   POPULAR: `popular`,
   CHEAP: `cheap`,
   NEW: `new`,
@@ -14,15 +14,15 @@ export const SortingOrder = {
 
 export const sortingButtons = [
   {
-    name: SortingOrder.POPULAR,
+    name: SortType.POPULAR,
     title: `Популярные`,
   },
   {
-    name: SortingOrder.CHEAP,
+    name: SortType.CHEAP,
     title: `Дешевые`,
   },
   {
-    name: SortingOrder.NEW,
+    name: SortType.NEW,
     title: `Новые`,
   },
 ];
