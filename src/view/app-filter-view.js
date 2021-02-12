@@ -13,4 +13,8 @@ export default class AppFilterView extends AbstractView {
   getTemplate() {
     return createAppFilterTemplate();
   }
+
+  getFilterFormContainer() {
+    return this.getElement().querySelector(`.filter__form`);
+  }
 }

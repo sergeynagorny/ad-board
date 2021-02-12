@@ -19,4 +19,12 @@ export default class AppResultsView extends AbstractView {
   getTemplate() {
     return createAppResultsTemplate();
   }
+
+  getSortingContainer() {
+    return this.getElement().querySelector(`.sorting__form`);
+  }
+
+  getResultsListContainer() {
+    return this.getElement().querySelector(`.results__list`);
+  }
 }

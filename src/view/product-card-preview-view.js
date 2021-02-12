@@ -9,17 +9,18 @@ const createMorePhotoPlugMarkup = (count) => {
 };
 
 const createProductCardPreviewTemplate = (product) => {
-  const {name, price, address, publishDate, photos} = product;
+  const {name, price, address, publishDate, photos, isFavorite} = product;
   const {city, street} = address;
 
   const cityAndStreet = getMergedAddress(city, street);
   const formattedPrice = getFormattedPrice(price);
   const formattedDate = getPublishDateDifference(publishDate);
   const morePhotoPlugMarkup = createMorePhotoPlugMarkup(photos.length);
+  const favoriteButtonChecked = isFavorite ? `fav-add--checked` : ``;
 
   return /* html */`
     <li class="results__item product">
-      <button class="product__favourite fav-add" type="button" aria-label="Добавить в избранное">
+      <button class="product__favourite fav-add ${favoriteButtonChecked}" type="button" aria-label="Добавить в избранное">
         <svg width="22" height="20" viewBox="0 0 22 20" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path fill-rule="evenodd" clip-rule="evenodd"
             d="M3 7C3 13 10 16.5 11 17C12 16.5 19 13 19 7C19 4.79086 17.2091 3 15 3C12 3 11 5 11 5C11 5 10 3 7 3C4.79086 3 3 4.79086 3 7Z"
@@ -54,9 +55,28 @@ export default class ProductCardPreviewView extends AbstractView {
     super();
 
     this._product = product;
+
+    this._favoriteButtonClickHandler = null;
+    this._cardOpenClickHandler = null;
   }
 
   getTemplate() {
     return createProductCardPreviewTemplate(this._product);
+  }
+
+  setFavoriteButtonClickHandler(handler) {
+    this._favoriteButtonClickHandler = handler;
+    this.getElement().querySelector(`.product__favourite`).addEventListener(`click`, this._favoriteButtonClickHandler);
+  }
+
+  setCardOpenClickHandler(handler) {
+    this._cardOpenClickHandler = handler;
+
+    this.getElement().addEventListener(`click`, (evt) => {
+      evt.preventDefault();
+      if (evt.target.closest(`.product__title`) || evt.target.closest(`.product__image`)) {
+        this._cardOpenClickHandler();
+      }
+    });
   }
 }

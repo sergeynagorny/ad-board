@@ -14,4 +14,12 @@ export default class AppView extends AbstractView {
   getTemplate() {
     return createAppTemplate();
   }
+
+  getAppContainer() {
+    return this.getElement().querySelector(`.onlineshop-app__wrapper`);
+  }
+
+  getProductCardFullContainer() {
+    return this.getElement();
+  }
 }

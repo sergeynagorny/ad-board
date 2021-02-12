@@ -33,7 +33,7 @@ const createCharsMarkup = (category, chars) => {
 
 
 const createProductCardFullTemplate = (product) => {
-  const {name, price, address, publishDate, description, seller, category, filters} = product;
+  const {name, price, address, publishDate, description, seller, category, filters, isFavorite} = product;
   const {city, street, building} = address;
   const {fullname, rating} = seller;
 
@@ -42,9 +42,11 @@ const createProductCardFullTemplate = (product) => {
   const formattedAddress = getMergedAddress(city, street, building);
   const ratingCLass = getRatingClass(rating);
   const charsMarkup = createCharsMarkup(category, filters);
+  const favoriteButtonChecked = isFavorite ? `fav-add--checked` : ``;
+
 
   return /* html */`
-    <section class="popup">
+    <section class="popup" style="display: block;">
       <div class="popup__inner">
         <button class="popup__close" type="button" aria-label="Закрыть">
           <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
@@ -58,7 +60,7 @@ const createProductCardFullTemplate = (product) => {
         <div class="popup__columns">
           <div class="popup__left">
             <div class="popup__gallery gallery">
-              <button class="gallery__favourite fav-add">
+              <button class="gallery__favourite fav-add ${favoriteButtonChecked}">
                 <svg width="22" height="20" viewBox="0 0 22 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path fill-rule="evenodd" clip-rule="evenodd"
                     d="M3 7C3 13 10 16.5 11 17C12 16.5 19 13 19 7C19 4.79086 17.2091 3 15 3C12 3 11 5 11 5C11 5 10 3 7 3C4.79086 3 3 4.79086 3 7Z"
@@ -119,9 +121,27 @@ export default class ProductCardFullView extends AbstractView {
     super();
 
     this._product = product;
+
+    this._favoriteButtonClickHandler = null;
+    this._cardCloseClickHandler = null;
   }
 
   getTemplate() {
     return createProductCardFullTemplate(this._product);
+  }
+
+  setFavoriteButtonClickHandler(handler) {
+    this._favoriteButtonClickHandler = handler;
+    this.getElement().querySelector(`.gallery__favourite`).addEventListener(`click`, this._favoriteButtonClickHandler);
+  }
+
+  setCardCloseClickHandler(handler) {
+    this._cardCloseClickHandler = handler;
+
+    this.getElement().addEventListener(`click`, (evt) => {
+      if (!evt.target.closest(`.popup__inner`) || evt.target.closest(`.popup__close`)) {
+        this._cardCloseClickHandler();
+      }
+    });
   }
 }
