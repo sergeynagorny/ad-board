@@ -14,17 +14,21 @@ const LeafletjsConfig = {
 
 
 export default class ProductCardMapView extends AbstractView {
-  constructor() {
+  constructor({coordinates}) {
     super();
 
     this.map = null;
+    this.coordinates = coordinates;
+
+    this.renderMap = this.renderMap.bind(this);
+    this.setAfterRenderHandler(this.renderMap);
   }
 
   getTemplate() {
     return /* html */`<div class="popup__map" style="height: 200px" id="map"></div>`;
   }
 
-  renderMap(coordinates) {
+  renderMap() {
     const element = this.getElement();
 
     if (this.map !== null) {
@@ -32,16 +36,17 @@ export default class ProductCardMapView extends AbstractView {
     }
 
     this.map = leafletjs.map(element, {
-      center: coordinates,
+      center: this.coordinates,
       zoom: 14,
       layers: [LeafletjsConfig.TITLE_LAYER],
       marker: true,
     });
 
-    leafletjs.marker(coordinates, {icon: LeafletjsConfig.ACTIVE_ICON}).addTo(this.map);
+    leafletjs.marker(this.coordinates, {icon: LeafletjsConfig.ACTIVE_ICON}).addTo(this.map);
   }
 
-  destroy() {
+  removeElement() {
+    super.removeElement();
     this.map.remove();
   }
 }
