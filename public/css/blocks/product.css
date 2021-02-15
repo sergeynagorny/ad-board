@@ -18,6 +18,11 @@
   position: relative;
 }
 
+.product__image img {
+  max-width: 326px;
+  height: 236px;
+}
+
 .product__image-more-photo {
   position: absolute;
   top: 0;
@@ -135,7 +140,7 @@
 
   color: var(--disabled-blue);
   font-weight: 500;
-  font-size: 20px;
+  font-size: 16px;
   line-height: 1.4;
 }
 
