@@ -13,9 +13,15 @@ import AppResultsPresenter from "./presenter/app-results-presenter";
 
 import {render} from "./utils/render";
 import {getMockData} from "./mocks/mocks";
+import ProductsModel from "./model/products-model";
+import FavoritesModel from "./model/favorites-model";
 
-const CARDS_PREVIEW_COUNT = 7;
+const CARDS_PREVIEW_COUNT = 2;
 const products = getMockData(CARDS_PREVIEW_COUNT);
+
+const favoritesModel = new FavoritesModel();
+const productsModel = new ProductsModel();
+productsModel.setProducts(products);
 
 const appView = new AppView();
 const appContainer = appView.getAppContainer();
@@ -25,15 +31,16 @@ const appFilterView = new AppFilterView();
 const filterFormContainer = appFilterView.getFilterFormContainer();
 render(appContainer, appFilterView);
 
-const appResultsPresenter = new AppResultsPresenter(appContainer, products);
+
+const appResultsPresenter = new AppResultsPresenter(appContainer, productsModel, favoritesModel);
 appResultsPresenter.render();
 
 
 // App Filter
-render(filterFormContainer, new FilterCategoryView());
-render(filterFormContainer, new FilterRangeView());
-render(filterFormContainer, new FilterCameraView());
-render(filterFormContainer, new FilterEstateView());
-render(filterFormContainer, new FilterLaptopView());
-render(filterFormContainer, new FilterCarView());
-render(filterFormContainer, new FilterShowButtonView());
+// render(filterFormContainer, new FilterCategoryView());
+// render(filterFormContainer, new FilterRangeView());
+// render(filterFormContainer, new FilterCameraView());
+// render(filterFormContainer, new FilterEstateView());
+// render(filterFormContainer, new FilterLaptopView());
+// render(filterFormContainer, new FilterCarView());
+// render(filterFormContainer, new FilterShowButtonView());
