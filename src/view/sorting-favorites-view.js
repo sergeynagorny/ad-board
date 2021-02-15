@@ -16,7 +16,29 @@ const createSortingFavoritesTemplate = () => {
 };
 
 export default class SortingFavoritesView extends AbstractView {
+  constructor() {
+    super();
+
+    this.callbacks = {
+      favoritesShownClick: null,
+    };
+
+    this.favoritesShownHandler = this.favoritesShownHandler.bind(this);
+  }
+
   getTemplate() {
     return createSortingFavoritesTemplate();
+  }
+
+  setFavoritesShownHandler(callback) {
+    this.callbacks.favoritesShownClick = callback;
+    this.getElement().querySelector(`#favourites`).addEventListener(`change`, this.favoritesShownHandler);
+  }
+
+  favoritesShownHandler(evt) {
+    evt.preventDefault();
+
+    const isChecked = evt.target.checked;
+    this.callbacks.favoritesShownClick(isChecked);
   }
 }
