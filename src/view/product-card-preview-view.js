@@ -2,20 +2,14 @@ import AbstractView from "./abstract-view";
 import {getPublishDateDifference} from "../utils/date";
 import {getFormattedPrice, getMergedAddress} from "../utils/utils";
 
-const MAX_PHOTO_COUNT = 5;
-
-const createMorePhotoPlugMarkup = (count) => {
-  return count > MAX_PHOTO_COUNT ? `<div class="product__image-more-photo hidden">+${count - MAX_PHOTO_COUNT} фото</div>` : ``;
-};
 
 const createProductCardPreviewTemplate = (product) => {
-  const {name, price, address, publishDate, photos, isFavorite} = product;
+  const {name, price, address, publishDate, isFavorite} = product;
   const {city, street} = address;
 
   const cityAndStreet = getMergedAddress(city, street);
   const formattedPrice = getFormattedPrice(price);
   const formattedDate = getPublishDateDifference(publishDate);
-  const morePhotoPlugMarkup = createMorePhotoPlugMarkup(photos.length);
   const favoriteButtonChecked = isFavorite ? `fav-add--checked` : ``;
 
   return /* html */`
@@ -27,17 +21,7 @@ const createProductCardPreviewTemplate = (product) => {
             stroke="white" stroke-width="2" stroke-linejoin="round" />
         </svg>
       </button>
-      <div class="product__image">
-        ${morePhotoPlugMarkup}
-        <img src="${photos[0]}" width="318" height="220" alt=${name}>
-        <div class="product__image-navigation">
-          <span class="product__navigation-item product__navigation-item--active"></span>
-          <span class="product__navigation-item"></span>
-          <span class="product__navigation-item"></span>
-          <span class="product__navigation-item"></span>
-          <span class="product__navigation-item"></span>
-        </div>
-      </div>
+
       <div class="product__content">
         <h3 class="product__title">
           <a href="#">${name}</a>
@@ -56,27 +40,58 @@ export default class ProductCardPreviewView extends AbstractView {
 
     this._product = product;
 
-    this._favoriteButtonClickHandler = null;
-    this._cardOpenClickHandler = null;
+    this.callbacks = {
+      favoriteButtonClick: null,
+      cardOpenClick: null,
+    };
+
+    this.favoriteButtonClickHandler = this.favoriteButtonClickHandler.bind(this);
+    this.cardImageClickHandler = this.cardImageClickHandler.bind(this);
+    this.cardTitleClickHandler = this.cardTitleClickHandler.bind(this);
   }
 
   getTemplate() {
     return createProductCardPreviewTemplate(this._product);
   }
 
-  setFavoriteButtonClickHandler(handler) {
-    this._favoriteButtonClickHandler = handler;
-    this.getElement().querySelector(`.product__favourite`).addEventListener(`click`, this._favoriteButtonClickHandler);
+  getGalleryContainer() {
+    return this.getElement();
+  }
+
+
+  // HANDLER SETTERS
+
+  setFavoriteButtonClickHandler(callback) {
+    this.callbacks.favoriteButtonClick = callback;
+    this.getElement().querySelector(`.product__favourite`).addEventListener(`click`, this.favoriteButtonClickHandler);
   }
 
   setCardOpenClickHandler(handler) {
-    this._cardOpenClickHandler = handler;
-
-    this.getElement().addEventListener(`click`, (evt) => {
-      evt.preventDefault();
-      if (evt.target.closest(`.product__title`) || evt.target.closest(`.product__image`)) {
-        this._cardOpenClickHandler();
-      }
-    });
+    this.callbacks.cardOpenClick = handler;
+    this.getElement().addEventListener(`click`, this.cardImageClickHandler);
+    this.getElement().addEventListener(`click`, this.cardTitleClickHandler);
   }
+
+
+  // HANDLERS
+
+  favoriteButtonClickHandler(evt) {
+    evt.preventDefault();
+    this.callbacks.favoriteButtonClick();
+  }
+
+  cardImageClickHandler(evt) {
+    evt.preventDefault();
+    if (evt.target.closest(`.product__image`)) {
+      this.callbacks.cardOpenClick();
+    }
+  }
+
+  cardTitleClickHandler(evt) {
+    evt.preventDefault();
+    if (evt.target.closest(`.product__title`)) {
+      this.callbacks.cardOpenClick();
+    }
+  }
+
 }
