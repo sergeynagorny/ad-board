@@ -1,3 +1,4 @@
+import {preloader} from "../utils/utils";
 import AbstractView from "./abstract-view";
 
 
@@ -17,8 +18,7 @@ const createImageNavigationMarkup = (photos) => {
   }).join(`\n`);
 };
 
-const createProductCardGalleryPreviewTemplate = (product) => {
-
+const createProductCardGalleryPreviewTemplate = (product, currentImageIndex) => {
   const {name, photos} = product;
 
   const imageNavigationMarkup = createImageNavigationMarkup(photos.slice(0, MAX_PHOTO_COUNT));
@@ -26,7 +26,7 @@ const createProductCardGalleryPreviewTemplate = (product) => {
 
   return (/* html */`
       <div class="product__image">
-        <img src="${photos[0]}" width="318" height="220" alt=${name}>
+        <img src="${photos[currentImageIndex]}" alt="${name}">
         <div class="product__image-navigation">
           ${imageNavigationMarkup}
         </div>
@@ -53,7 +53,7 @@ export default class ProductCardGalleryView extends AbstractView {
   }
 
   getTemplate() {
-    return createProductCardGalleryPreviewTemplate(this._product);
+    return createProductCardGalleryPreviewTemplate(this._product, this._currentImgIndex);
   }
 
   showMorePhotoPlugMarkup(evt) {
@@ -83,10 +83,12 @@ export default class ProductCardGalleryView extends AbstractView {
     }
 
     this._currentImgIndex = targetImgIndex;
-
     const photo = this._product.photos[this._currentImgIndex];
 
-    // TODO: Preloader promise here
-    this._mainImage.src = photo;
+    preloader(photo)
+      .then(() => {
+        this._mainImage.src = photo;
+        this._mainImage.srcset = photo;
+      });
   }
 }
