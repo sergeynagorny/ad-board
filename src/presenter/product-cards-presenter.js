@@ -13,8 +13,6 @@ export default class ProductCardsPresenter {
     this._productsModel = productsModel;
     this._product = null;
 
-    this._map = null;
-
     this._cardPreviewContainer = cardPreviewContainer;
     this._cardFullContainer = cardFullContainer;
 
@@ -22,8 +20,11 @@ export default class ProductCardsPresenter {
     this._productCardFullView = null;
     this._productCardMapView = null;
     this._productCardGalleryView = null;
+    this._productCardGalleryPreviewView = null;
 
     this._isCardOpen = false;
+
+    this.afterRenderCardFullHandler = this.afterRenderCardFullHandler.bind(this);
 
     this.handleOpenCardClick = this.handleOpenCardClick.bind(this);
     this.handleCloseCardClick = this.handleCloseCardClick.bind(this);
@@ -37,12 +38,19 @@ export default class ProductCardsPresenter {
     this.id = product.id;
     this._product = product;
 
+    this.renderCardPreview();
+
+    if (this._isCardOpen) {
+      this.renderCardFull();
+    }
+  }
+
+  renderCardPreview() {
     const oldProductCardPreviewView = this._productCardPreviewView;
     this._productCardPreviewView = new ProductCardPreviewView(this._product);
 
     this._productCardGalleryPreviewView = new ProductCardGalleryPreviewView(this._product);
     render(this._productCardPreviewView.getGalleryContainer(), this._productCardGalleryPreviewView, RenderPosition.AFTERBEGIN);
-
 
     this._productCardPreviewView.setFavoriteButtonClickHandler(this.handleFavoriteButtonClick);
     this._productCardPreviewView.setCardOpenClickHandler(this.handleOpenCardClick);
@@ -52,72 +60,62 @@ export default class ProductCardsPresenter {
     } else {
       render(this._cardPreviewContainer, this._productCardPreviewView);
     }
+  }
 
-    // TODO: dirty
+  renderCardFull() {
+    this._isCardOpen = true;
 
-    if (this._isCardOpen) {
-      this._cardOpen();
+    const oldProductCardFullView = this._productCardFullView;
+    this._productCardFullView = new ProductCardFullView(this._product);
+    this._productCardFullView.setAfterRenderHandler(this.afterRenderCardFullHandler);
+    this._productCardFullView.setFavoriteButtonClickHandler(this.handleFavoriteButtonClick);
+    this._productCardFullView.setCardCloseClickHandler(this.handleCloseCardClick);
+
+    if (oldProductCardFullView === null) {
+      this._productCardMapView = new ProductCardMapView(this._product);
+      this._productCardGalleryView = new ProductCardGalleryView(this._product);
+      render(this._cardFullContainer, this._productCardFullView);
+    } else {
+      replace(this._productCardFullView, oldProductCardFullView);
+    }
+  }
+
+  cardFullClose() {
+    if (this._productCardFullView !== null) {
+      remove(this._productCardFullView);
+      remove(this._productCardGalleryView);
+      remove(this._productCardMapView);
+
+      this._productCardFullView = null;
+      this._isCardOpen = false;
     }
   }
 
   destroy() {
+    this.cardFullClose();
     remove(this._productCardPreviewView);
   }
 
 
   // HANDLERS
 
+  afterRenderCardFullHandler() {
+    const galleryContainer = this._productCardFullView.getGalleryContainer();
+    const mapContainer = this._productCardFullView.getMapContainer();
+
+    render(galleryContainer, this._productCardGalleryView);
+    render(mapContainer, this._productCardMapView, RenderPosition.AFTERBEGIN);
+  }
+
   handleCloseCardClick() {
-    this._cardClose();
+    this.cardFullClose();
   }
 
   handleOpenCardClick() {
-    this._cardOpen();
+    this.renderCardFull(this._product);
   }
 
   handleFavoriteButtonClick() {
     this._productsModel.changeProductFavorite(this._product);
-  }
-
-
-  // PRIVATE METHODS
-
-  _renderCardFull() {
-    this._isCardOpen = true;
-
-    // TODO: dirty
-
-    const oldProductCardFullView = this._productCardFullView;
-    this._productCardFullView = new ProductCardFullView(this._product);
-    this._productCardFullView.setFavoriteButtonClickHandler(this.handleFavoriteButtonClick);
-    this._productCardFullView.setCardCloseClickHandler(this.handleCloseCardClick);
-    const mapContainer = this._productCardFullView.getMapContainer();
-    const galleryContainer = this._productCardFullView.getGalleryContainer();
-
-
-    if (oldProductCardFullView === null) {
-      this._productCardMapView = new ProductCardMapView();
-      this._productCardGalleryView = new ProductCardGalleryView(this._product);
-      render(this._cardFullContainer, this._productCardFullView);
-      render(galleryContainer, this._productCardGalleryView);
-      render(mapContainer, this._productCardMapView, RenderPosition.AFTERBEGIN);
-      this._productCardMapView.renderMap(this._product.coordinates);
-    } else {
-      replace(this._productCardFullView, oldProductCardFullView);
-      render(mapContainer, this._productCardMapView, RenderPosition.AFTERBEGIN);
-      render(galleryContainer, this._productCardGalleryView);
-      this._productCardMapView.renderMap(this._product.coordinates);
-    }
-  }
-
-  _cardOpen() {
-    this._renderCardFull(this._product);
-  }
-
-  _cardClose() {
-    this._productCardMapView.destroy();
-    this._isCardOpen = false;
-    remove(this._productCardFullView);
-    this._productCardFullView = null;
   }
 }
