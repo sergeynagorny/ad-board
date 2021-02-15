@@ -9,23 +9,27 @@
 }
 
 .gallery__list {
-  margin: 0;
-  padding: 0;
   display: flex;
   flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+
   list-style: none;
 }
 
 .gallery__main-pic {
   margin-bottom: 8px;
+
   background-color: var(--disabled-bg);
 }
 
 .gallery__item {
-  margin-bottom: 8px;
   width: calc((100% - 24px) / 4);
-  cursor: pointer;
+  margin-bottom: 8px;
+
   background-color: var(--disabled-bg);
+  cursor: pointer;
+
   transition: var(--animation);
 }
 
@@ -34,6 +38,7 @@
 }
 
 .gallery__item--active {
+  cursor: default;
   opacity: 0.5;
 }
 

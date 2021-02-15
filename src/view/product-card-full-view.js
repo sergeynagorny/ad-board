@@ -44,7 +44,6 @@ const createProductCardFullTemplate = (product) => {
   const charsMarkup = createCharsMarkup(category, filters);
   const favoriteButtonChecked = isFavorite ? `fav-add--checked` : ``;
 
-
   return /* html */`
     <section class="popup" style="display: block;">
       <div class="popup__inner">
@@ -67,27 +66,6 @@ const createProductCardFullTemplate = (product) => {
                     stroke="white" stroke-width="2" stroke-linejoin="round" />
                 </svg>
               </button>
-              <div class="gallery__main-pic">
-                <img src="img/car-big.jpg" srcset="img/car-big-2x.jpg 2x" width="520" height="340"
-                  alt="Ford Mustang 2020">
-              </div>
-              <ul class="gallery__list">
-                <li class="gallery__item gallery__item--active">
-                  <img src="img/car1.jpg" srcset="img/car1-2x.jpg 2x" alt="Ford Mustang 2020" width="124" height="80">
-                </li>
-                <li class="gallery__item">
-                  <img src="img/car2.jpg" srcset="img/car2-2x.jpg 2x" alt="Ford Mustang 2020" width="124" height="80">
-                </li>
-                <li class="gallery__item">
-                  <img src="img/car3.jpg" srcset="img/car3-2x.jpg 2x" alt="Ford Mustang 2020" width="124" height="80">
-                </li>
-                <li class="gallery__item">
-                  <img src="img/car4.jpg" srcset="img/car4-2x.jpg 2x" alt="Ford Mustang 2020" width="124" height="80">
-                </li>
-                <li class="gallery__item">
-                  <img src="img/car5.jpg" srcset="img/car5-2x.jpg 2x" alt="Ford Mustang 2020" width="124" height="80">
-                </li>
-              </ul>
             </div>
             <ul class="popup__chars chars">
               ${charsMarkup}
@@ -105,9 +83,6 @@ const createProductCardFullTemplate = (product) => {
             </div>
           </div>
           <div class="popup__right">
-            <div class="popup__map">
-              <img src="img/map.jpg" width="268" height="180" alt="${formattedAddress}">
-            </div>
             <div class="popup__address">${formattedAddress}</div>
           </div>
         </div>
@@ -122,26 +97,72 @@ export default class ProductCardFullView extends AbstractView {
 
     this._product = product;
 
-    this._favoriteButtonClickHandler = null;
-    this._cardCloseClickHandler = null;
+    this.callbacks = {
+      favoriteButtonClick: null,
+      cardCloseClick: null,
+    };
+
+    this.favoriteButtonClickHandler = this.favoriteButtonClickHandler.bind(this);
+    this.documentEscKeyDownHandler = this.documentEscKeyDownHandler.bind(this);
+    this.cardOutsideClickHandler = this.cardOutsideClickHandler.bind(this);
+    this.cardCloseClickHandler = this.cardCloseClickHandler.bind(this);
   }
 
   getTemplate() {
     return createProductCardFullTemplate(this._product);
   }
 
-  setFavoriteButtonClickHandler(handler) {
-    this._favoriteButtonClickHandler = handler;
-    this.getElement().querySelector(`.gallery__favourite`).addEventListener(`click`, this._favoriteButtonClickHandler);
+  getGalleryContainer() {
+    return this.getElement().querySelector(`.gallery`);
   }
 
-  setCardCloseClickHandler(handler) {
-    this._cardCloseClickHandler = handler;
+  getMapContainer() {
+    return this.getElement().querySelector(`.popup__right`);
+  }
 
-    this.getElement().addEventListener(`click`, (evt) => {
-      if (!evt.target.closest(`.popup__inner`) || evt.target.closest(`.popup__close`)) {
-        this._cardCloseClickHandler();
-      }
-    });
+  closeCard() {
+    document.removeEventListener(`keydown`, this.documentEscKeyDownHandler);
+    this.callbacks.cardCloseClick();
+  }
+
+
+  // HANDLER SETTERS
+
+  setFavoriteButtonClickHandler(callback) {
+    this.callbacks.favoriteButtonClick = callback;
+    this.getElement().querySelector(`.gallery__favourite`).addEventListener(`click`, this.favoriteButtonClickHandler);
+  }
+
+  setCardCloseClickHandler(callback) {
+    this.callbacks.cardCloseClick = callback;
+    document.addEventListener(`keydown`, this.documentEscKeyDownHandler);
+    this.getElement().addEventListener(`click`, this.cardOutsideClickHandler);
+    this.getElement().querySelector(`.popup__close`).addEventListener(`click`, this.cardCloseClickHandler);
+  }
+
+
+  // HANDLERS
+
+  favoriteButtonClickHandler(evt) {
+    evt.preventDefault();
+    this.callbacks.favoriteButtonClick();
+  }
+
+  documentEscKeyDownHandler(evt) {
+    if (evt.key === `Escape` || evt.key === `Esc`) {
+      this.closeCard();
+    }
+  }
+
+  cardCloseClickHandler(evt) {
+    evt.preventDefault();
+    this.closeCard();
+  }
+
+  cardOutsideClickHandler(evt) {
+    evt.preventDefault();
+    if (this.getElement() === evt.target) {
+      this.closeCard();
+    }
   }
 }
