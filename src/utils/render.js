@@ -1,3 +1,5 @@
+import AbstractView from "../view/abstract-view";
+
 export const RenderPosition = {
   AFTERBEGIN: `afterbegin`,
   BEFOREEND: `beforeend`,
@@ -10,6 +12,13 @@ export const createElement = (template) => {
   return newElement.firstElementChild;
 };
 
+
+const handleAfterRenderCallback = (component) => {
+  if (component instanceof AbstractView) {
+    component.handleAfterRenderCallback();
+  }
+};
+
 export const render = (container, component, place = RenderPosition.BEFOREEND) => {
   switch (place) {
     case RenderPosition.AFTERBEGIN:
@@ -19,6 +28,7 @@ export const render = (container, component, place = RenderPosition.BEFOREEND) =
       container.append(component.getElement());
       break;
   }
+  handleAfterRenderCallback(component);
 };
 
 export const replace = (newComponent, oldComponent) => {
@@ -31,6 +41,7 @@ export const replace = (newComponent, oldComponent) => {
 
   if (isExistElements && parentElement.contains(oldElement)) {
     parentElement.replaceChild(newElement, oldElement);
+    handleAfterRenderCallback(newComponent);
   }
 };
 

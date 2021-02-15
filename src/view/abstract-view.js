@@ -7,6 +7,10 @@ export default class AbstractView {
     }
 
     this._$element = null;
+
+    this.callbacks = {
+      afterRender: null,
+    };
   }
 
   getTemplate() {
@@ -23,5 +27,15 @@ export default class AbstractView {
 
   removeElement() {
     this._$element = null;
+  }
+
+  setAfterRenderHandler(callback) {
+    this.callbacks.afterRender = callback;
+  }
+
+  handleAfterRenderCallback() {
+    if (typeof this.callbacks.afterRender === `function`) {
+      this.callbacks.afterRender();
+    }
   }
 }
