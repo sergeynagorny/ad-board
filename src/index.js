@@ -12,29 +12,30 @@ import FilterShowButtonView from "./view/filter-show-button-view";
 import AppResultsPresenter from "./presenter/app-results-presenter";
 
 import {render} from "./utils/render";
-import {getMockData} from "./mocks/mocks";
 import ProductsModel from "./model/products-model";
 import FavoritesModel from "./model/favorites-model";
+import API from "./api";
 
-const CARDS_PREVIEW_COUNT = 2;
-const products = getMockData(CARDS_PREVIEW_COUNT);
+const END_POINT = `https://main-shop-fake-server.herokuapp.com`;
+const api = new API(END_POINT);
+
 
 const favoritesModel = new FavoritesModel();
 const productsModel = new ProductsModel();
-productsModel.setProducts(products);
+
+api.getProducts()
+  .then((data) => productsModel.adaptToClient(data))
+  .then((data) => productsModel.setProducts(data));
+
 
 const appView = new AppView();
 const appContainer = appView.getAppContainer();
 render(document.querySelector(`main`), appView);
 
+
 const appFilterView = new AppFilterView();
 const filterFormContainer = appFilterView.getFilterFormContainer();
 render(appContainer, appFilterView);
-
-
-const appResultsPresenter = new AppResultsPresenter(appContainer, productsModel, favoritesModel);
-appResultsPresenter.render();
-
 
 // App Filter
 // render(filterFormContainer, new FilterCategoryView());
@@ -44,3 +45,9 @@ appResultsPresenter.render();
 // render(filterFormContainer, new FilterLaptopView());
 // render(filterFormContainer, new FilterCarView());
 // render(filterFormContainer, new FilterShowButtonView());
+
+
+const appResultsPresenter = new AppResultsPresenter(appContainer, productsModel, favoritesModel);
+appResultsPresenter.render();
+
+

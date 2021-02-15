@@ -1,5 +1,7 @@
 import AbstractModel from "./abstract-model";
 import {UpdateType} from "../const";
+import {adaptCategory} from "../utils/product-adapters";
+import {convertStringTimestampToDate} from "../utils/date";
 
 
 export default class ProductsModel extends AbstractModel {
@@ -41,5 +43,21 @@ export default class ProductsModel extends AbstractModel {
     this.observer.notify(UpdateType.MINOR, newProduct);
 
     return true;
+  }
+
+  adaptToClient({products}) {
+    return products.map((product, index) => {
+      const id = 1 + index;
+      const publishDate = convertStringTimestampToDate(product[`publish-date`]);
+
+      delete product[`publish-date`];
+
+      return Object.assign({}, product, {
+        'id': id,
+        'isFavorite': false,
+        'category': adaptCategory(product[`category`]),
+        'publishDate': publishDate,
+      });
+    });
   }
 }
