@@ -1,14 +1,15 @@
-import AbstractView from "./abstract-view";
+import AbstractFilterView from "./abstract-filter-view";
+
 
 const createFilterCameraTemplate = () => {
   return /* html */`
     <div class="filter__camera">
-      <fieldset class="filter__type filter__type--camera">
+      <fieldset id="camera_mirror" class="filter__type filter__type--camera">
         <legend>Тип фотоаппарата</legend>
         <ul class="filter__checkboxes-list filter__checkboxes-list--camera">
           <li class="filter__checkboxes-item">
-            <input class="visually-hidden" type="checkbox" name="camera-type" value="mirror" id="mirror">
-            <label for="mirror">Зеркальный</label>
+            <input class="visually-hidden" type="checkbox" name="camera-type" value="slr" id="slr">
+            <label for="slr">Зеркальный</label>
           </li>
           <li class="filter__checkboxes-item">
             <input class="visually-hidden" type="checkbox" name="camera-type" value="digital" id="digital">
@@ -24,11 +25,11 @@ const createFilterCameraTemplate = () => {
       <div class="filter__select-wrapper filter__select-wrapper--min-resolution">
         <label for="resolution-matrix">Минимальное разрешение матрицы</label>
         <select id="resolution-matrix" name="resolution-matrix">
-          <option value="1mp" selected>1 МП</option>
-          <option value="3mp">3 МП</option>
-          <option value="5mp">5 МП</option>
-          <option value="7mp">7 МП</option>
-          <option value="10mp">10 МП</option>
+          <option value="1" selected>1 МП</option>
+          <option value="3">3 МП</option>
+          <option value="5">5 МП</option>
+          <option value="7">7 МП</option>
+          <option value="10">10 МП</option>
         </select>
         <svg width="14" height="8" viewBox="0 0 14 8" xmlns="http://www.w3.org/2000/svg">
           <path fill-rule="evenodd" clip-rule="evenodd"
@@ -40,7 +41,7 @@ const createFilterCameraTemplate = () => {
         <select id="resolution-video" name="resolution-video">
           <option value="any" selected>Любое</option>
           <option value="HD">HD</option>
-          <option value="Full_HD">Full HD</option>
+          <option value="full-hd">Full HD</option>
           <option value="4K">4K</option>
           <option value="5K">5K</option>
         </select>
@@ -53,8 +54,19 @@ const createFilterCameraTemplate = () => {
     `;
 };
 
-export default class FilterCameraView extends AbstractView {
+export default class FilterCameraView extends AbstractFilterView {
   getTemplate() {
     return createFilterCameraTemplate();
+  }
+
+  setFilterChangeHandler(callback) {
+    super.setFilterChangeHandler(callback);
+    this.getElement().querySelector(`#resolution-matrix`).addEventListener(`change`, this.handleFilterChange);
+    this.getElement().querySelector(`#resolution-video`).addEventListener(`change`, this.handleFilterChange);
+  }
+
+  setCheckboxFilterChangeHandler(callback) {
+    super.setCheckboxFilterChangeHandler(callback);
+    this.getElement().querySelector(`#camera_mirror`).addEventListener(`change`, this.handleCheckboxFilterChange);
   }
 }

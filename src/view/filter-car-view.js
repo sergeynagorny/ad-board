@@ -1,11 +1,12 @@
-import AbstractView from "./abstract-view";
+import AbstractFilterView from "./abstract-filter-view";
+
 
 const createFilterCarTemplate = () => {
   return /* html */`
     <div class="filter__car">
       <div class="filter__select-wrapper">
         <label for="resolution-video">Минимальный год выпуска</label>
-        <select id="car_year" name="car_year">
+        <select id="car_year" name="production-year">
           <option value="1900" selected>1900</option>
           <option value="1940">1940</option>
           <option value="1960">1960</option>
@@ -17,7 +18,7 @@ const createFilterCarTemplate = () => {
             d="M0.292893 0.292893C0.683417 -0.0976311 1.31658 -0.0976311 1.70711 0.292893L7 5.58579L12.2929 0.292893C12.6834 -0.0976311 13.3166 -0.0976311 13.7071 0.292893C14.0976 0.683417 14.0976 1.31658 13.7071 1.70711L7.70711 7.70711C7.31658 8.09763 6.68342 8.09763 6.29289 7.70711L0.292893 1.70711C-0.0976311 1.31658 -0.0976311 0.683417 0.292893 0.292893Z" />
         </svg>
       </div>
-      <fieldset class="filter__radiobuttons filter__radiobuttons--transmission">
+      <fieldset id="car_transmission" class="filter__radiobuttons filter__radiobuttons--transmission">
         <legend>Коробка передач</legend>
         <ul class="filter__radiobuttons-list">
           <li class="filter__radiobuttons-item">
@@ -36,28 +37,28 @@ const createFilterCarTemplate = () => {
           </li>
         </ul>
       </fieldset>
-      <fieldset class="filter__type filter__type--car-body">
+      <fieldset id="car_body" class="filter__type filter__type--car-body">
         <legend>Тип кузова</legend>
         <ul class="filter__checkboxes-list filter__checkboxes-list--car-body">
           <li class="filter__checkboxes-item">
-            <input class="visually-hidden" type="checkbox" name="car-body" value="sedan" id="sedan">
+            <input class="visually-hidden" type="checkbox" name="body-type" value="sedan" id="sedan">
             <label for="sedan">Седан</label>
           </li>
           <li class="filter__checkboxes-item">
-            <input class="visually-hidden" type="checkbox" name="car-body" value="universal" id="universal">
+            <input class="visually-hidden" type="checkbox" name="body-type" value="universal" id="universal">
             <label for="universal">Универсал</label>
           </li>
           <li class="filter__checkboxes-item">
-            <input class="visually-hidden" type="checkbox" name="car-body" value="hatchback" id="hatchback">
+            <input class="visually-hidden" type="checkbox" name="body-type" value="hatchback" id="hatchback">
             <label for="hatchback">Хэтчбэк</label>
           </li>
           <li class="filter__checkboxes-item">
-            <input class="visually-hidden" type="checkbox" name="car-body" value="jeep" id="jeep">
-            <label for="jeep">Внедорожник</label>
+            <input class="visually-hidden" type="checkbox" name="body-type" value="suv" id="suv">
+            <label for="suv">Внедорожник</label>
           </li>
           <li class="filter__checkboxes-item">
-            <input class="visually-hidden" type="checkbox" name="car-body" value="cupe" id="cupe">
-            <label for="cupe">Купэ</label>
+            <input class="visually-hidden" type="checkbox" name="body-type" value="coupe" id="coupe">
+            <label for="coupe">Купэ</label>
           </li>
         </ul>
       </fieldset>
@@ -65,8 +66,19 @@ const createFilterCarTemplate = () => {
     `;
 };
 
-export default class FilterCarView extends AbstractView {
+export default class FilterCarView extends AbstractFilterView {
   getTemplate() {
     return createFilterCarTemplate();
+  }
+
+  setFilterChangeHandler(callback) {
+    super.setFilterChangeHandler(callback);
+    this.getElement().querySelector(`#car_transmission`).addEventListener(`change`, this.handleFilterChange);
+    this.getElement().querySelector(`#car_year`).addEventListener(`change`, this.handleFilterChange);
+  }
+
+  setCheckboxFilterChangeHandler(callback) {
+    super.setCheckboxFilterChangeHandler(callback);
+    this.getElement().querySelector(`#car_body`).addEventListener(`change`, this.handleCheckboxFilterChange);
   }
 }

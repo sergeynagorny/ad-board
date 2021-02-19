@@ -1,4 +1,5 @@
-import AbstractView from "./abstract-view";
+import AbstractFilterView from "./abstract-filter-view";
+
 
 const createFilterEstateTemplate = () => {
   return /* html */`
@@ -15,7 +16,7 @@ const createFilterEstateTemplate = () => {
             <label for="flat">Квартира</label>
           </li>
           <li class="filter__checkboxes-item">
-            <input class="visually-hidden" type="checkbox" name="estate-type" value="apartments"
+            <input class="visually-hidden" type="checkbox" name="estate-type" value="apartment"
               id="apartments">
             <label for="apartments">Апартаменты</label>
           </li>
@@ -25,27 +26,27 @@ const createFilterEstateTemplate = () => {
         <label for="square">Минимальная площадь, м<sup>2</sup></label>
         <input type="number" id="square" name="min-square" min="1" value="" placeholder="0">
       </div>
-      <fieldset class="filter__radiobuttons filter__radiobuttons--ram">
+      <fieldset id="rooms" class="filter__radiobuttons filter__radiobuttons--ram">
         <legend>Количество комнат</legend>
         <ul class="filter__ram-list">
           <li class="filter__radiobuttons-item">
-            <input class="visually-hidden" type="radio" name="rooms" value="any" id="any_room">
+            <input class="visually-hidden" type="radio" name="rooms" value="any" id="any_room" checked>
             <label for="any_room">Любое</label>
           </li>
           <li class="filter__radiobuttons-item">
-            <input class="visually-hidden" type="radio" name="rooms" value="one" id="one">
+            <input class="visually-hidden" type="radio" name="rooms" value="1" id="one">
             <label for="one">1</label>
           </li>
           <li class="filter__radiobuttons-item">
-            <input class="visually-hidden" type="radio" name="rooms" value="two" id="two">
+            <input class="visually-hidden" type="radio" name="rooms" value="2" id="two">
             <label for="two">2</label>
           </li>
           <li class="filter__radiobuttons-item">
-            <input class="visually-hidden" type="radio" name="rooms" value="three" id="three">
+            <input class="visually-hidden" type="radio" name="rooms" value="3" id="three">
             <label for="three">3</label>
           </li>
           <li class="filter__radiobuttons-item">
-            <input class="visually-hidden" type="radio" name="rooms" value="four" id="four">
+            <input class="visually-hidden" type="radio" name="rooms" value="4" id="four">
             <label for="four">4</label>
           </li>
           <li class="filter__radiobuttons-item">
@@ -58,8 +59,19 @@ const createFilterEstateTemplate = () => {
     `;
 };
 
-export default class FilterEstateView extends AbstractView {
+export default class FilterEstateView extends AbstractFilterView {
   getTemplate() {
     return createFilterEstateTemplate();
+  }
+
+  setFilterChangeHandler(callback) {
+    super.setFilterChangeHandler(callback);
+    this.getElement().querySelector(`#rooms`).addEventListener(`change`, this.handleFilterChange);
+    this.getElement().querySelector(`#square`).addEventListener(`change`, this.handleFilterChange);
+  }
+
+  setCheckboxFilterChangeHandler(callback) {
+    super.setCheckboxFilterChangeHandler(callback);
+    this.getElement().querySelector(`.filter__type`).addEventListener(`change`, this.handleCheckboxFilterChange);
   }
 }

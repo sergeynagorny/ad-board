@@ -1,13 +1,14 @@
-import AbstractView from "./abstract-view";
+import AbstractFilterView from "./abstract-filter-view";
+
 
 const createFilterLaptopTemplate = () => {
   return /* html */`
     <div class="filter__laptop">
-      <fieldset class="filter__type filter__type--laptop">
+      <fieldset id="laptop_type" class="filter__type filter__type--laptop">
         <legend>Тип ноутбука</legend>
         <ul class="filter__checkboxes-list filter__checkboxes-list--laptop-ram">
           <li class="filter__checkboxes-item">
-            <input class="visually-hidden" type="checkbox" name="laptop-type" value="ultra" id="ultra">
+            <input class="visually-hidden" type="checkbox" name="laptop-type" value="ultrabook" id="ultra">
             <label for="ultra">Ультрабук</label>
           </li>
           <li class="filter__checkboxes-item">
@@ -20,28 +21,28 @@ const createFilterLaptopTemplate = () => {
           </li>
         </ul>
       </fieldset>
-      <fieldset class="filter__radiobuttons filter__radiobuttons--ram">
+      <fieldset id="laptop_ram" class="filter__radiobuttons filter__radiobuttons--ram">
         <legend>Минимальный объем оперативной памяти</legend>
         <ul class="filter__radiobuttons-list">
           <li class="filter__radiobuttons-item">
-            <input class="visually-hidden" type="radio" name="ram" value="any" id="any_ram">
+            <input class="visually-hidden" type="radio" name="ram" value="any" id="any_ram" checked>
             <label for="any_ram">Любой</label>
           </li>
           <li class="filter__radiobuttons-item">
-            <input class="visually-hidden" type="radio" name="ram" value="4gb" id="4gb">
+            <input class="visually-hidden" type="radio" name="ram" value="4" id="4gb">
             <label for="4gb">4 Гб</label>
           </li>
           <li class="filter__radiobuttons-item">
-            <input class="visually-hidden" type="radio" name="ram" value="8gb" id="8gb">
+            <input class="visually-hidden" type="radio" name="ram" value="8" id="8gb">
             <label for="8gb">8 Гб</label>
           </li>
           <li class="filter__radiobuttons-item">
-            <input class="visually-hidden" type="radio" name="ram" value="16gb" id="16gb">
+            <input class="visually-hidden" type="radio" name="ram" value="16" id="16gb">
             <label for="16gb">16 Гб</label>
           </li>
         </ul>
       </fieldset>
-      <fieldset class="filter__radiobuttons filter__radiobuttons--diagonal">
+      <fieldset id="laptop_diagonal" class="filter__radiobuttons filter__radiobuttons--diagonal">
         <legend>Минимальная диагональ экрана</legend>
         <ul class="filter__radiobuttons-list">
           <li class="filter__radiobuttons-item">
@@ -49,24 +50,24 @@ const createFilterLaptopTemplate = () => {
             <label for="any_diagonal">Любая</label>
           </li>
           <li class="filter__radiobuttons-item">
-            <input class="visually-hidden" type="radio" name="diagonal" value="13in" id="13in">
+            <input class="visually-hidden" type="radio" name="diagonal" value="13" id="13in">
             <label for="13in">13<sup>″</sup></label>
           </li>
           <li class="filter__radiobuttons-item">
-            <input class="visually-hidden" type="radio" name="diagonal" value="14in" id="14in">
+            <input class="visually-hidden" type="radio" name="diagonal" value="14" id="14in">
             <label for="14in">14<sup>″</sup></label>
           </li>
           <li class="filter__radiobuttons-item">
-            <input class="visually-hidden" type="radio" name="diagonal" value="15in" id="15in">
+            <input class="visually-hidden" type="radio" name="diagonal" value="15" id="15in">
             <label for="15in">15<sup>″</sup></label>
           </li>
           <li class="filter__radiobuttons-item">
-            <input class="visually-hidden" type="radio" name="diagonal" value="17in" id="17in">
+            <input class="visually-hidden" type="radio" name="diagonal" value="17" id="17in">
             <label for="17in">17<sup>″</sup></label>
           </li>
         </ul>
       </fieldset>
-      <fieldset class="filter__type filter__type--laptop-processor">
+      <fieldset id="laptop_processor" class="filter__type filter__type--laptop-processor">
         <legend>Тип процессора</legend>
         <ul class="filter__checkboxes-list filter__checkboxes-list--laptop-processor">
           <li class="filter__checkboxes-item">
@@ -87,8 +88,20 @@ const createFilterLaptopTemplate = () => {
     `;
 };
 
-export default class FilterLaptopView extends AbstractView {
+export default class FilterLaptopView extends AbstractFilterView {
   getTemplate() {
     return createFilterLaptopTemplate();
+  }
+
+  setFilterChangeHandler(callback) {
+    super.setFilterChangeHandler(callback);
+    this.getElement().querySelector(`#laptop_diagonal`).addEventListener(`change`, this.handleFilterChange);
+    this.getElement().querySelector(`#laptop_ram`).addEventListener(`change`, this.handleFilterChange);
+  }
+
+  setCheckboxFilterChangeHandler(callback) {
+    super.setCheckboxFilterChangeHandler(callback);
+    this.getElement().querySelector(`#laptop_type`).addEventListener(`change`, this.handleCheckboxFilterChange);
+    this.getElement().querySelector(`#laptop_processor`).addEventListener(`change`, this.handleCheckboxFilterChange);
   }
 }
