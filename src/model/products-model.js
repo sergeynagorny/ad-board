@@ -7,7 +7,6 @@ import {convertStringTimestampToDate} from "../utils/date";
 export default class ProductsModel extends AbstractModel {
   constructor() {
     super();
-
     this._products = [];
   }
 
@@ -15,15 +14,13 @@ export default class ProductsModel extends AbstractModel {
     return this._products;
   }
 
-  setProducts(products) {
+  setProducts(updateType, products) {
     this._products = products;
-
-    this.observer.notify(UpdateType.MAJOR, products);
+    this.observer.notify(updateType, products);
   }
 
   changeProductFavorite(product) {
     const newProduct = Object.assign({}, product, {isFavorite: !product.isFavorite});
-
     this.updateProduct(newProduct);
   }
 
@@ -51,6 +48,8 @@ export default class ProductsModel extends AbstractModel {
       const publishDate = convertStringTimestampToDate(product[`publish-date`]);
 
       delete product[`publish-date`];
+
+      // TODO: Create localStorage for favorite Products
 
       return Object.assign({}, product, {
         'id': id,
