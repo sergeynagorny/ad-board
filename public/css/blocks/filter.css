@@ -1,6 +1,7 @@
 .filter {
   width: 348px;
-  overflow-y: auto;
+
+  overflow-y: visible;
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
@@ -15,12 +16,12 @@
 }
 
 
-
 .filter fieldset {
-  margin-left: 0;
-  margin-right: 0;
   margin-top: 0;
+  margin-right: 0;
+  margin-left: 0;
   padding: 0;
+
   border: none;
 }
 
@@ -30,10 +31,11 @@
   display: block;
   margin: 0;
   margin-bottom: 8px;
+
+  color: var(--disabled-blue);
   font-weight: 600;
   line-height: 1.57;
   letter-spacing: 0.02em;
-  color: var(--disabled-blue);
 }
 
 .filter select {
@@ -41,49 +43,59 @@
   width: 100%;
   min-height: 48px;
   padding: 10px 0 6px 20px;
-  border: 2px solid var(--disabled-bg);
+
+  color: var(--titles-color);
 
   font-weight: 500;
   font-size: 16px;
   line-height: 1.75;
 
-  color: var(--titles-color);
   background-color: var(--main-bg);
+  border: 2px solid var(--disabled-bg);
   border-radius: 4px;
+  cursor: pointer;
+
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  cursor: pointer;
 }
 
 .filter select:disabled + svg {
-  fill: var(--disabled-blue);
   cursor: default;
+
+  fill: var(--disabled-blue);
 }
 
 .filter select:disabled:hover {
   cursor: default;
 }
 
+.filter select:disabled {
+  color: var(--disabled-blue);
+}
+
 .filter select:focus {
-  outline: none;
-  border: 2px solid var(--light-blue);
-  padding: 10px 0px 6px 20px;
+  padding: 10px 0 6px 20px;
+
   background-position: 90.5% 50%;
+  border: 2px solid var(--light-blue);
+  outline: none;
 }
 
 
 .filter__select-wrapper svg {
   position: absolute;
-  top:64%;
+  top: 64%;
   right: 20px;
+
   cursor: pointer;
 
   fill: var(--main-blue);
-  }
+}
 
 .filter__select-wrapper {
   position: relative;
+
   margin-bottom: 21px;
 }
 
@@ -105,21 +117,23 @@
 
 
 .filter__button {
-  margin-bottom: 20px;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   min-width: 142px;
   min-height: 52px;
-  border: none;
+  margin-bottom: 20px;
   padding: 0;
 
-  font-weight: 600;
+  color: #ffffff;
+
+  font-weight: 500;
   font-size: 20px;
   line-height: 1.6;
   letter-spacing: 0.02em;
-  color: #ffffff;
+
   background-color: var(--main-blue);
+  border: none;
   border-radius: 4px;
   cursor: pointer;
 }
@@ -131,17 +145,19 @@
 }
 
 .filter__button:active {
-  outline: none;
   background-color: var(--dark-blue);
+  outline: none;
 }
 
 .filter__button:focus {
-  outline: none;
   background-color: var(--dark-blue);
+  outline: none;
 }
 
 .filter__button:disabled {
-  background-color: var(--disabled-blue);
+  color: var(--disabled-blue);
+
+  background-color: var(--disabled-bg);
   cursor: default;
 }
 
@@ -152,6 +168,7 @@
   padding: 0;
 
   list-style: none;
+
   transition: var(--animation);
 }
 
@@ -177,10 +194,10 @@
 
 .filter__checkboxes-list label,
 .filter__radiobuttons label {
+  color: var(--main-blue);
   font-weight: 500;
   font-size: 16px;
   line-height: 1.75;
-  color: var(--main-blue);
 
   cursor: pointer;
 
@@ -189,6 +206,7 @@
 
 .filter__checkboxes-list label {
   position: relative;
+
   display: flex;
   align-items: center;
 
@@ -198,40 +216,47 @@
 
 
 .filter__checkboxes-list label::before {
-  content: "";
 
   position: absolute;
-  left: 0px;
+  left: 0;
+
   display: block;
   width: 24px;
   height: 24px;
 
   border: 2px solid #e1e3ec;
   border-radius: 4px;
+
   transition: var(--animation);
+
+  content: '';
 }
 
 .filter__checkboxes-list label::after {
-  content: "";
 
   position: absolute;
-  left: 0px;
-  
+  left: 0;
+
+  display: none;
+
   width: 24px;
   height: 24px;
-  background-image: url("../../img/icon-tick.svg");
+
+  background-image: url('../../img/icon-tick.svg');
   background-repeat: no-repeat;
   background-position: center;
-  display: none;
+
   transition: var(--animation);
+
+  content: '';
 }
 
 .filter__checkboxes-list input:checked + label::before {
- 
-  background-color: var(--dark-blue);
 
   width: 24px;
   height: 24px;
+
+  background-color: var(--dark-blue);
   border-color: var(--dark-blue);
 }
 
@@ -239,7 +264,7 @@
   display: block;
 }
 
-.filter__checkboxes-list input:checked:hover + label:before {
+.filter__checkboxes-list input:checked:hover + label::before {
   background-color: var(--light-blue);
   border-color: var(--light-blue);
 }
@@ -255,25 +280,29 @@
   width: 100%;
   min-height: 48px;
   padding-left: 15px;
-  border: 2px solid #e1e3ec;
-  border-radius: 4px;
-  background-color: var(--main-bg);
 
   color: var(--titles-color);
+  font-weight: 500;
   font-size: 16p;
   line-height: 28px;
-  font-weight: 500;
+
+  background-color: var(--main-bg);
+  border: 2px solid #e1e3ec;
+  border-radius: 4px;
+
+  transition: var(--animation);
+
+  -moz-appearance: textfield;
 
   appearance: none;
-  transition: var(--animation);
-  -moz-appearance:textfield;
 }
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-    display: none;
-    -webkit-appearance: none;
-    margin: 0; 
+  display: none;
+  margin: 0;
+
+  -webkit-appearance: none;
 }
 
 .filter__min-square input:focus::placeholder {
@@ -286,19 +315,20 @@ input::-webkit-inner-spin-button {
 }
 
 .filter__min-square input:active {
-  outline: none;
   border-color: var(--dark-blue);
+  outline: none;
   cursor: text;
 }
 
 .filter__min-square input:focus {
-  outline: none;
   border-color: var(--dark-blue);
+  outline: none;
 }
 
 .filter__min-square input:disabled {
-  background-color: var(--disabled-bg);
   color: var(--disabed-blue);
+
+  background-color: var(--disabled-bg);
 }
 
 .filter__min-square input:disabled:hover {
@@ -316,6 +346,7 @@ input::-webkit-inner-spin-button {
 
 .filter__radiobuttons label {
   border: 2px solid #e1e3ec;
+
   transition: var(--animation);
 }
 
@@ -344,6 +375,7 @@ input::-webkit-inner-spin-button {
 
 .filter__radiobuttons input:checked + label {
   color: #ffffff;
+
   background-color: var(--main-blue);
   border-color: var(--main-blue);
 }
@@ -354,10 +386,11 @@ input::-webkit-inner-spin-button {
 }
 
 .filter__radiobuttons input:disabled + label {
-  background-color: var(--main-bg);
   color: var(--disabled-blue);
+
+  background-color: var(--main-bg);
   cursor: default;
-  }
+}
 
 .filter__radiobuttons input:disabled + label:hover {
   border-color: var(--disabled-bg);
@@ -373,7 +406,7 @@ input::-webkit-inner-spin-button {
 }
 
 .filter__checkboxes-item label:hover {
-  color: var(--light-blue)
+  color: var(--light-blue);
 }
 
 
@@ -382,6 +415,7 @@ input::-webkit-inner-spin-button {
 
 .filter__checkboxes-item input:disabled + label {
   color: var(--disabled-blue);
+
   cursor: default;
 }
 
@@ -396,7 +430,6 @@ input::-webkit-inner-spin-button {
 
 
 .filter__checkboxes-item input:checked:disabled + label::before {
-  background-image: url("../../img/icon-tick_disabled.svg");
   background-color: var(--disabled-bg);
   border-color: var(--disabled-bg);
   cursor: default;
@@ -404,6 +437,7 @@ input::-webkit-inner-spin-button {
 
 .filter__checkboxes-item input:checked:disabled + label {
   color: var(--disabled-blue);
+
   cursor: default;
 }
 
@@ -426,8 +460,9 @@ input::-webkit-inner-spin-button {
 }
 
 .filter__radiobuttons label:hover {
-  background-color: var(--light-blue);
   color: #ffffff;
+
+  background-color: var(--light-blue);
   border-color: var(--light-blue);
 }
 
@@ -442,15 +477,16 @@ input::-webkit-inner-spin-button {
 }
 
 .filter__radiobuttons input:focus:not(:checked) + label {
+  color: #ffffff;
+
   background-color: var(--light-blue);
   border-color: var(--light-blue);
-  color: #ffffff;
 }
 
 
 .filter__type--car-body {
-margin-bottom: 22px;
-}  
+  margin-bottom: 22px;
+}
 
 .filter__ram-list {
   display: flex;
@@ -461,12 +497,12 @@ margin-bottom: 22px;
 }
 
 .filter__checkboxes-item input:focus:checked + label {
-  color: var(--main-blue)
+  color: var(--main-blue);
 }
 
 
 .filter__checkboxes-item input:focus:not(:checked) + label::before {
-  border-color:#E1E3EC;
+  border-color: #e1e3ec;
 }
 
 .filter__checkboxes-list input:checked + label:hover {
@@ -475,7 +511,7 @@ margin-bottom: 22px;
 
 
 .filter__checkboxes-item input:not(:checked):focus + label:focus {
- color: var(--light-blue);
+  color: var(--light-blue);
 }
 
 .filter__radiobuttons-item {

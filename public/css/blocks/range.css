@@ -1,15 +1,40 @@
 .rs-container .rs-selected {
-    color: var(--white);
-    background-color: var(--main-blue);
-    border-color: var(--main-blue);
+  color: var(--white);
+
+  background-color: var(--main-blue);
+  border-color: var(--main-blue);
 }
 
 .rs-container .rs-scale {
-    display: none;
+  display: none;
 }
 
 .rs-tooltip {
-    color: var(--white);
-    background-color: var(--main-blue);
-    border-color: var(--main-blue);
+  color: var(--white);
+  white-space: nowrap;
+
+  background-color: var(--main-blue);
+  border-color: var(--main-blue);
+}
+
+.rs-container {
+  width: 90%;
+  margin: 0 auto;
+}
+
+.rs-container.disabled .rs-tooltip {
+  color: var(--disabled-blue);
+
+  background-color: var(--disabled-bg);
+  border-color: transparent;
+}
+
+
+.rs-container.disabled .rs-selected {
+  background-color: var(--disabled-bg);
+  border-color: transparent;
+}
+
+.rs-container.disabled .rs-pointer {
+  box-shadow: none;
 }
