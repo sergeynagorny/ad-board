@@ -1,15 +1,20 @@
 import AbstractView from "./abstract-view";
 
-const createFilterCategoryTemplate = () => {
+const createCategoryOptionsMarkup = (options, selectedOption) => {
+  return options.map(({name, title}) => {
+    const selected = selectedOption === name ? `selected` : ``;
+    return /* html */`<option value="${name}" ${selected}>${title}</option>`;
+  }).join(`\n`);
+};
+
+const createFilterCategoryTemplate = (category, selectedOption) => {
+  const categoryOptionsMarkup = createCategoryOptionsMarkup(category, selectedOption);
+
   return /* html */`
     <div class="filter__select-wrapper">
       <label for="categories">Категория товаров</label>
       <select id="categories" name="categories">
-        <option value="all" selected>Все</option>
-        <option value="estate">Недвижимость</option>
-        <option value="laptops">Ноутбуки</option>
-        <option value="camera">Фотоаппараты</option>
-        <option value="cars">Автомобили</option>
+        ${categoryOptionsMarkup}
       </select>
       <svg width="14" height="8" viewBox="0 0 14 8" xmlns="http://www.w3.org/2000/svg">
         <path fill-rule="evenodd" clip-rule="evenodd"
@@ -20,7 +25,30 @@ const createFilterCategoryTemplate = () => {
 };
 
 export default class FilterCategoryView extends AbstractView {
+  constructor(category, selectedOption) {
+    super();
+
+    this._category = category;
+    this._selectedOption = selectedOption;
+
+    this.callbacks = {
+      categorySelectChange: null,
+    };
+
+    this.categorySelectHandler = this.categorySelectHandler.bind(this);
+  }
+
   getTemplate() {
-    return createFilterCategoryTemplate();
+    return createFilterCategoryTemplate(this._category, this._selectedOption);
+  }
+
+  setCategorySelectHandler(callback) {
+    this.callbacks.categorySelectChange = callback;
+    this.getElement().querySelector(`#categories`).addEventListener(`change`, this.categorySelectHandler);
+  }
+
+  categorySelectHandler(evt) {
+    const value = evt.target.value;
+    this.callbacks.categorySelectChange(value);
   }
 }
