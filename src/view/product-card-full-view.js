@@ -22,7 +22,7 @@ const getRatingClass = (rating) => {
 
 const createCharsMarkup = (category, chars) => {
   return getFilteredEntries(chars).map(([key, value]) => {
-    return (/* html */`
+    return value === `-` ? `` : (/* html */`
       <li class="chars__item">
         <div class="chars__name">${adaptFilterName(category, key)}</div>
         <div class="chars__value">${adaptFilterValue(category, value)}</div>
