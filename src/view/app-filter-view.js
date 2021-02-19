@@ -17,4 +17,16 @@ export default class AppFilterView extends AbstractView {
   getFilterFormContainer() {
     return this.getElement().querySelector(`.filter__form`);
   }
+
+  disabled(isDisabled) {
+    const form = this.getElement().querySelector(`.filter__form`);
+
+    const inputs = form.getElementsByTagName(`input`);
+    const buttons = form.getElementsByTagName(`button`);
+    const selects = form.getElementsByTagName(`select`);
+
+    [...inputs, ...selects, ...buttons].forEach((element) => {
+      element.disabled = isDisabled;
+    });
+  }
 }
