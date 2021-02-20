@@ -2,12 +2,15 @@ import AbstractModel from "./abstract-model";
 import {UpdateType} from "../const";
 import {adaptCategory} from "../utils/product-adapters";
 import {convertStringTimestampToDate} from "../utils/date";
+import LocalStorageWrapper from "../utils/localstorage-wrapper";
 
 
 export default class ProductsModel extends AbstractModel {
   constructor() {
     super();
     this._products = [];
+    this._favoritesStorage = new LocalStorageWrapper(`favoritesId`);
+    this._favoritesId = this._favoritesStorage.getData();
   }
 
   getProducts() {
@@ -20,7 +23,10 @@ export default class ProductsModel extends AbstractModel {
   }
 
   changeProductFavorite(product) {
-    const newProduct = Object.assign({}, product, {isFavorite: !product.isFavorite});
+    const {id, isFavorite} = product;
+
+    this._favoritesStorage.setData(id);
+    const newProduct = Object.assign({}, product, {isFavorite: !isFavorite});
     this.updateProduct(newProduct);
   }
 
@@ -49,11 +55,9 @@ export default class ProductsModel extends AbstractModel {
 
       delete product[`publish-date`];
 
-      // TODO: Create localStorage for favorite Products
-
       return Object.assign({}, product, {
         'id': id,
-        'isFavorite': false,
+        'isFavorite': this._favoritesId.has(id),
         'category': adaptCategory(product[`category`]),
         'publishDate': publishDate,
       });
